@@ -4,6 +4,15 @@ import axios from 'axios'
 const GameScreen = () => {
     const [quote, setQuote] = useState('');
     const [hiddenQuote, setHiddenQuote] = useState('');
+    const [selectedLetters, setSelectedLetters] = useState(new Set());
+
+
+    const keyboardLayout = [
+        'QWERTZUIOP',
+        'ASDFGHJKL',
+        'YXCVBNM'
+    ]
+
 
     useEffect(() => {
         const fetchQuote = async () => {
@@ -20,16 +29,57 @@ const GameScreen = () => {
     }, []);
 
     const hideQuote = (quote) => {
-        return quote.replace(/a/g, '_')
+        return quote.replace(/[a-zA-Z]/g, '_')
     }
-  return (
-    <div>
-        <h1>Random fetched quote:</h1>
-        <p>{quote}</p>
-        <p>{hiddenQuote}</p>
-        <button onClick={() => window.location.href='/'}>Restart</button>
-    </div>
-  )
+
+    const handleLetterSelection = (letter) => {
+        if (!selectedLetters.has(letter.toLowerCase())) {
+            setSelectedLetters(new Set(selectedLetters).add(letter.toLowerCase()))
+            revealLetter(letter.toLowerCase())
+        }
+    }
+
+    const revealLetter = (letter) => {
+        var adjustedHiddenQuote = quote.toLowerCase().split('')
+            .map((char, index) => {
+                if (char === letter
+                    || selectedLetters.has(char.toLowerCase())
+                    || char.toUpperCase()===char.toLowerCase()) {
+                    return quote[index]
+                } else if (char === ' ') {
+                    return ' '
+                } else {
+                    return '_'
+                }
+            })
+            .join('');
+
+        setHiddenQuote(adjustedHiddenQuote);
+    }
+
+
+    return (
+        <div>
+            <h1>Random fetched quote:</h1>
+            <p>{quote}</p>
+            <p>{hiddenQuote}</p>
+            <div>
+                {keyboardLayout.map((row, rowIndex) => (
+                    <div key={rowIndex}>
+                        {row.split('').map((letter, colIndex) => (
+                            <button key={colIndex} onClick={() => handleLetterSelection(letter)}
+                                style={{ width: '50px', height: '50px', margin: '5px', fontFamily: 'cursive', fontSize: '130%' }}
+                                disabled={selectedLetters.has(letter.toLowerCase())}
+                            >
+                                {letter}
+                            </button>
+                        ))}
+                    </div>
+                ))}
+            </div>
+            <button onClick={() => window.location.href = '/'}>Restart</button>
+        </div>
+    )
 }
 
 export default GameScreen
