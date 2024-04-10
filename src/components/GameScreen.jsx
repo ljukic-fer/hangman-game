@@ -5,6 +5,8 @@ const GameScreen = () => {
     const [quote, setQuote] = useState('');
     const [hiddenQuote, setHiddenQuote] = useState('');
     const [selectedLetters, setSelectedLetters] = useState(new Set());
+    const [errors, setErrors] = useState(0);
+    const [gameOver, setGameOver] = useState(false);
 
 
     const keyboardLayout = [
@@ -44,7 +46,7 @@ const GameScreen = () => {
             .map((char, index) => {
                 if (char === letter
                     || selectedLetters.has(char.toLowerCase())
-                    || char.toUpperCase()===char.toLowerCase()) {
+                    || char.toUpperCase() === char.toLowerCase()) {
                     return quote[index]
                 } else if (char === ' ') {
                     return ' '
@@ -55,6 +57,8 @@ const GameScreen = () => {
             .join('');
 
         setHiddenQuote(adjustedHiddenQuote);
+        if (!quote.toLowerCase().includes(letter)) setErrors(errors + 1);
+        if (quote === adjustedHiddenQuote) setGameOver(true);
     }
 
 
@@ -62,21 +66,32 @@ const GameScreen = () => {
         <div>
             <h1>Random fetched quote:</h1>
             <p>{quote}</p>
+            {!gameOver &&
+                <h2>Errors: {errors}</h2>
+            }
             <p>{hiddenQuote}</p>
-            <div>
-                {keyboardLayout.map((row, rowIndex) => (
-                    <div key={rowIndex}>
-                        {row.split('').map((letter, colIndex) => (
-                            <button key={colIndex} onClick={() => handleLetterSelection(letter)}
-                                style={{ width: '50px', height: '50px', margin: '5px', fontFamily: 'cursive', fontSize: '130%' }}
-                                disabled={selectedLetters.has(letter.toLowerCase())}
-                            >
-                                {letter}
-                            </button>
-                        ))}
-                    </div>
-                ))}
-            </div>
+            {gameOver &&
+                <div>
+                    <h1>CONGRATS</h1>
+                    <p>You finished with {errors} errors</p>
+                </div>
+            }
+            {!gameOver &&
+                <div>
+                    {keyboardLayout.map((row, rowIndex) => (
+                        <div key={rowIndex}>
+                            {row.split('').map((letter, colIndex) => (
+                                <button key={colIndex} onClick={() => handleLetterSelection(letter)}
+                                    style={{ width: '50px', height: '50px', margin: '5px', fontFamily: 'cursive', fontSize: '130%' }}
+                                    disabled={selectedLetters.has(letter.toLowerCase())}
+                                >
+                                    {letter}
+                                </button>
+                            ))}
+                        </div>
+                    ))}
+                </div>
+            }
             <button onClick={() => window.location.href = '/'}>Restart</button>
         </div>
     )
