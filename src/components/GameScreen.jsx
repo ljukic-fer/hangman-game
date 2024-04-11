@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
-const GameScreen = () => {
+const GameScreen = ({username}) => {
     const [quote, setQuote] = useState('');
     const [hiddenQuote, setHiddenQuote] = useState('');
     const [selectedLetters, setSelectedLetters] = useState(new Set());
@@ -17,6 +17,7 @@ const GameScreen = () => {
 
     useEffect(() => {
         fetchQuote();
+        //eslint-disable-next-line
     }, []);
 
     const fetchQuote = async () => {
@@ -63,13 +64,9 @@ const GameScreen = () => {
         if (quote === adjustedHiddenQuote) setGameOver(true);
     }
 
-    const restartGame = () => {
-        fetchQuote();
-    }
-
-
     return (
         <div>
+            <h1>Hi {username}</h1>
             <h1>Random fetched quote:</h1>
             <p>{quote}</p>
             {!gameOver &&
@@ -98,7 +95,7 @@ const GameScreen = () => {
                     ))}
                 </div>
             }
-            <button onClick={restartGame}>Restart</button>
+            <button onClick={fetchQuote}>Restart</button>
         </div>
     )
 }
