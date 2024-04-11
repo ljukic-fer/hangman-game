@@ -18,7 +18,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         {!started && <HomePage gameStarted={startGame} />}
-        {started && <GameScreen />}
+        {started && <GameScreen username={name}/>}
       </header>
     </div>
   );
