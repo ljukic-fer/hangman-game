@@ -15,20 +15,22 @@ const GameScreen = () => {
         'YXCVBNM'
     ]
 
-
     useEffect(() => {
-        const fetchQuote = async () => {
-            try {
-                const response = await axios.get('https://api.quotable.io/random');
-                setQuote(response.data.content);
-                setHiddenQuote(hideQuote(response.data.content));
-            } catch (error) {
-                console.error('Error getting quote: ', error);
-            }
-        }
-
         fetchQuote();
     }, []);
+
+    const fetchQuote = async () => {
+        try {
+            const response = await axios.get('https://api.quotable.io/random');
+            setQuote(response.data.content);
+            setHiddenQuote(hideQuote(response.data.content));
+            setGameOver(false);
+            setSelectedLetters(new Set());
+            setErrors(0);
+        } catch (error) {
+            console.error('Error getting quote: ', error);
+        }
+    }
 
     const hideQuote = (quote) => {
         return quote.replace(/[a-zA-Z]/g, '_')
@@ -59,6 +61,10 @@ const GameScreen = () => {
         setHiddenQuote(adjustedHiddenQuote);
         if (!quote.toLowerCase().includes(letter)) setErrors(errors + 1);
         if (quote === adjustedHiddenQuote) setGameOver(true);
+    }
+
+    const restartGame = () => {
+        fetchQuote();
     }
 
 
@@ -92,7 +98,7 @@ const GameScreen = () => {
                     ))}
                 </div>
             }
-            <button onClick={() => window.location.href = '/'}>Restart</button>
+            <button onClick={restartGame}>Restart</button>
         </div>
     )
 }
