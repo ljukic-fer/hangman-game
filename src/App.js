@@ -22,6 +22,10 @@ function App() {
     setErrors(errors);
   }
 
+  const newGame = () => {
+    setFinished(false);
+  }
+
 
   return (
     <Provider store={store}>
@@ -29,7 +33,7 @@ function App() {
       <header className="App-header">
         {!started && !finished && <HomePage gameStarted={startGame} />}
         {started && !finished && <GameScreen username={name} gameEnded={endGame}/>}
-        {started && finished && <HighScores user={name} errs={errors}/>}
+        {started && finished && <HighScores user={name} errs={errors} gameRestarted={newGame}/>}
       </header>
     </div>
     </Provider>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const HighScores = ( {user, errs} ) => {
+const HighScores = ( {user, errs, gameRestarted} ) => {
     const [scores, setScores] = useState([]);    
 
     useEffect (() => {
@@ -16,10 +16,15 @@ const HighScores = ( {user, errs} ) => {
         }
     }
 
+    const newGame = () => {
+        gameRestarted(user);
+    }
+
     return (
         <div>
             <h1>Congratulations, {user}!</h1>
             <h2>You finished the game with {errs} errors</h2>
+            <button onClick={newGame}>New game</button>
             <h1>
                 HighScores
             </h1>
