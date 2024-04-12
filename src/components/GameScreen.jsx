@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
-const GameScreen = ({ username }) => {
+const GameScreen = ({ username, gameEnded}) => {
     const [quote, setQuote] = useState('');
     const [hiddenQuote, setHiddenQuote] = useState('');
     const [selectedLetters, setSelectedLetters] = useState(new Set());
     const [errors, setErrors] = useState(0);
     const [gameOver, setGameOver] = useState(false);
     const [timer, setTimer] = useState(0);
-    const [scores, setScores] = useState([])
+    const [scores, setScores] = useState([]);
 
 
     const keyboardLayout = [
@@ -79,6 +79,7 @@ const GameScreen = ({ username }) => {
             setTimer(Date.now() - timer);
             sendScore();
             fetchScores();
+            gameEnded(errors);
         }
     }
 
