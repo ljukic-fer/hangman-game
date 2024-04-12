@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
-const GameScreen = ({username}) => {
+const GameScreen = ({ username }) => {
     const [quote, setQuote] = useState('');
     const [hiddenQuote, setHiddenQuote] = useState('');
     const [selectedLetters, setSelectedLetters] = useState(new Set());
     const [errors, setErrors] = useState(0);
     const [gameOver, setGameOver] = useState(false);
+    const [timer, setTimer] = useState(0);
 
 
     const keyboardLayout = [
@@ -28,6 +29,7 @@ const GameScreen = ({username}) => {
             setGameOver(false);
             setSelectedLetters(new Set());
             setErrors(0);
+            setTimer(Date.now());
         } catch (error) {
             console.error('Error getting quote: ', error);
         }
@@ -61,14 +63,42 @@ const GameScreen = ({username}) => {
 
         setHiddenQuote(adjustedHiddenQuote);
         if (!quote.toLowerCase().includes(letter)) setErrors(errors + 1);
-        if (quote === adjustedHiddenQuote) setGameOver(true);
+        if (quote === adjustedHiddenQuote) {
+            setGameOver(true);
+            setTimer(Date.now() - timer);
+            sendScore();
+        }
+    }
+
+
+    const sendScore = async () => {
+        const score = {
+            quoteId: quote.id,
+            length: quote.length,
+            uniqueCharacters: new Set(quote.toLowerCase().match(/[a-z]/g).size),
+            userName: username,
+            errors: errors,
+            duration: timer
+        }
+
+        try {
+            await axios.post('https://my-json-server.typicode.com/stanko-ingemark/hang_the_wise_man_frontend_task/highscores',
+                score, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+        } catch (error) {
+            console.error("Error sending data: ", error);
+        }
     }
 
     return (
         <div>
             <h1>Hi {username}</h1>
             <h1>Random fetched quote:</h1>
-            <p>{quote}</p>
+            <p>{timer}</p>
+            <p>{new Set(quote.toLowerCase().match(/[a-z]/g)).size}</p>
             {!gameOver &&
                 <h2>Errors: {errors}</h2>
             }
