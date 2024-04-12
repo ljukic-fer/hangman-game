@@ -8,6 +8,7 @@ const GameScreen = ({ username }) => {
     const [errors, setErrors] = useState(0);
     const [gameOver, setGameOver] = useState(false);
     const [timer, setTimer] = useState(0);
+    const [scores, setScores] = useState([])
 
 
     const keyboardLayout = [
@@ -30,8 +31,18 @@ const GameScreen = ({ username }) => {
             setSelectedLetters(new Set());
             setErrors(0);
             setTimer(Date.now());
+            fetchScores();
         } catch (error) {
             console.error('Error getting quote: ', error);
+        }
+    }
+
+    const fetchScores = async () => {
+        try {
+            const response = await axios.get('https://my-json-server.typicode.com/stanko-ingemark/hang_the_wise_man_frontend_task/highscores');
+            setScores(response.data);
+        } catch (error) {
+            console.error("Error fetchig highscores: ", error);
         }
     }
 
@@ -67,6 +78,7 @@ const GameScreen = ({ username }) => {
             setGameOver(true);
             setTimer(Date.now() - timer);
             sendScore();
+            fetchScores();
         }
     }
 
@@ -123,6 +135,9 @@ const GameScreen = ({ username }) => {
                             ))}
                         </div>
                     ))}
+                    {scores.map(({ id, userName, errors }) => {
+                        return <p key={id}>{userName} : {100/(1+errors)}</p>
+                    } )}
                 </div>
             }
             <button onClick={fetchQuote}>Restart</button>
