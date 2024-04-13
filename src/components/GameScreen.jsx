@@ -8,7 +8,6 @@ const GameScreen = ({ username, gameEnded}) => {
     const [errors, setErrors] = useState(0);
     const [gameOver, setGameOver] = useState(false);
     const [timer, setTimer] = useState(0);
-    const [scores, setScores] = useState([]);
 
 
     const keyboardLayout = [
