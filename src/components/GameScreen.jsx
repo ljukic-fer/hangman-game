@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import axios from 'axios';
+import styles from '../style';
 
 const GameScreen = ({ username, gameEnded}) => {
     const [quote, setQuote] = useState('');
@@ -96,12 +97,12 @@ const GameScreen = ({ username, gameEnded}) => {
 
     return (
         <div>
-            <h1>Hi {username}</h1>
+            <h1 className={styles.heading2}>Welcome {username}</h1>
             <h1>Random fetched quote:</h1>
             {!gameOver &&
-                <h2>Errors: {errors}</h2>
+                <h2 className={styles.heading2}>Errors: {errors}</h2>
             }
-            <p>{hiddenQuote}</p>
+            <p className={styles.paragraph}>{hiddenQuote}</p>
             {gameOver &&
                 <div>
                     <h1>CONGRATS</h1>
@@ -111,11 +112,13 @@ const GameScreen = ({ username, gameEnded}) => {
             {!gameOver &&
                 <div>
                     {keyboardLayout.map((row, rowIndex) => (
-                        <div key={rowIndex}>
+                        <div key={rowIndex} className={styles.paragraph}>
                             {row.split('').map((letter, colIndex) => (
-                                <button key={colIndex} onClick={() => handleLetterSelection(letter)}
-                                    style={{ width: '50px', height: '50px', margin: '5px', fontFamily: 'cursive', fontSize: '130%' }}
-                                    disabled={selectedLetters.has(letter.toLowerCase())}
+                                <button key={colIndex}
+                                        className={selectedLetters.has(letter.toLowerCase()) ? styles.selectedKey : styles.defaultKey}
+                                        onClick={() => handleLetterSelection(letter)}
+                                        style={{ width: '50px', height: '50px', margin: '5px', fontFamily: 'cursive', fontSize: '130%' }}
+                                        disabled={selectedLetters.has(letter.toLowerCase())}
                                 >
                                     {letter}
                                 </button>

@@ -30,7 +30,7 @@ function App() {
   return (
     <Provider store={store}>
     <div className="App">
-      <header className="App-header">
+      <header className="App-header bg-teal-400">
         {!started && !finished && <HomePage gameStarted={startGame} />}
         {started && !finished && <GameScreen username={name} gameEnded={endGame}/>}
         {started && finished && <HighScores user={name} errs={errors} gameRestarted={newGame}/>}
