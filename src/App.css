@@ -1,3 +1,7 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
 .App {
   text-align: center;
 }
@@ -22,6 +26,7 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  
 }
 
 .App-link {
@@ -37,20 +42,69 @@
   }
 }
 
-@keyframes rotate {
+.spinner {
+  position: relative;
+  width: 20px;
+  height: 20px;
+}
+
+.spinner::before,
+.spinner::after {
+  content: "";
+  position: absolute;
+  width: 2px;
+  height: 100%;
+  background-color: black;
+}
+
+.spinner::before {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.spinner::after {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) rotate(-45deg);
+}
+
+@keyframes spin {
   0% {
-    transform: rotate(0deg);
+      transform: rotate(0);
   }
   100% {
-    transform: rotate(45deg);
+      transform: rotate(360deg);
   }
 }
 
-.animate-rotate {
-  animation: rotate 0.5s infinite alternate;
-  transform-origin: bottom center
+.bg-indigo-500 .spinner::before,
+.bg-indigo-500 .spinner::after {
+  background-color: white;
 }
 
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+.animate-spin {
+  animation: spin 3s linear infinite;
+}
+
+.mouth-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex;
+}
+
+.mouth {
+  width: 40px;
+  height: 30px;
+  border-radius: 50%;
+  border: 3px solid black;
+  animation:  mouth-animation 1.5s linear infinite;
+}
+
+@keyframes mouth-animation {
+  0%, 100% {
+    transform: scaleY(1);
+  } 50% {
+    transform: scaleY(0);
+  }
+}
