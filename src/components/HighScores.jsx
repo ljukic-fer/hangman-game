@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchScores } from '../redux/actions/HighScoresActions';
+import styles from '../style';
 
 const HighScores = ({ user, errs, gameRestarted }) => {
 
@@ -16,21 +17,43 @@ const HighScores = ({ user, errs, gameRestarted }) => {
         gameRestarted(user);
     }
 
+    const sortedScores = [...scores].sort((a, b) => {
+        const scoreA = 100 / (1 + a.errors);
+        const scoreB = 100 / (1 + b.errors);
+        if (scoreB < scoreA) return -1;
+        return null
+    })
+
     return (
-        <div>
-            <h1>Congratulations, {user}!</h1>
-            <h2>You finished the game with {errs} errors</h2>
-            <button onClick={newGame}>New game</button>
+        <div className='container mx-auto p-2'>
+            <h1 className={styles.heading1}>Congratulations, {user}!</h1>
+            <h2 className={styles.heading2}>You finished the game with {errs} errors.</h2>
+            <h2 className={styles.heading2}>Your score is {100 / (1 + errs)}</h2>
+            <button className='px-4 py-4 bg-buttonColor rounded-[20px]' onClick={newGame}>New game</button>
             <h1>
                 HighScores
             </h1>
-            <ul>
-                {scores.map((score) => (
-                    <li key={score.id}>
-                        {score.userName}: {100 / (1 + score.errors)}
-                    </li>
-                ))}
-            </ul>
+            {loading && <p>Loading...</p>}
+            {error && <p>Error: cannot fetch highscores</p>}
+            <table className={styles.table}>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Username</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+
+                <tbody className=''>
+                    {sortedScores.map((score, index) => (
+                        <tr key={score.id}>
+                            <td>{index + 1}</td>
+                            <td>{score.userName}</td>
+                            <td>{Math.round(100000 / (1 + score.errors)) / 1000}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     )
 }
