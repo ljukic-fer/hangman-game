@@ -4,7 +4,7 @@ const styles = {
     paragraph: "font-poppins font-normal text-teal-900 text-[20px]",
     selectedKey: "bg-teal-900 text-white rounded-lg",
     defaultKey: "text-teal-900 hover:bg-teal-500 rounded-lg",
-    table: "bg-gradient-to-br from-violet-600 to-teal-600 rounded-lg hover:shadow-2xl hover:scale-110 transition delay-100"
+    table: "bg-gradient-to-br from-violet-600 to-teal-600 rounded-lg hover:shadow-2xl hover:scale-110 transition delay-150 container w-7/12 mx-auto p-2"
 }
 
 export default styles;

@@ -28,9 +28,9 @@ const HighScores = ({ user, errs, gameRestarted }) => {
         <div className='container mx-auto p-2'>
             <h1 className={styles.heading1}>Congratulations, {user}!</h1>
             <h2 className={styles.heading2}>You finished the game with {errs} errors.</h2>
-            <h2 className={styles.heading2}>Your score is {100 / (1 + errs)}</h2>
-            <button className='px-4 py-4 bg-buttonColor rounded-[20px]' onClick={newGame}>New game</button>
-            <h1>
+            <h2 className={styles.heading2}>Your score is {Math.round(100000 / (1 + errs)) / 1000}</h2>
+            <button className='px-4 py-4 bg-buttonColor rounded-[20px] hover:bg-red-950 my-10' onClick={newGame}>New game</button>
+            <h1 className={`${styles.heading2} my-10`}>
                 HighScores
             </h1>
             {loading && <p>Loading...</p>}

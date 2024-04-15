@@ -102,12 +102,11 @@ const GameScreen = ({ gameEnded}) => {
 
     return (
         <div>
-            <h1 className={styles.heading2}>Welcome {name}</h1>
-            <h1>Random fetched quote:</h1>
+            <h1 className={styles.heading1}>Welcome {name}</h1>
             {!gameOver &&
                 <h2 className={styles.heading2}>Errors: {errors}</h2>
             }
-            <p className={styles.paragraph}>{hiddenQuote}</p>
+            <p className='font-poppins font-normal text-teal-900 text-[28px]'>{hiddenQuote}</p>
             {gameOver &&
                 <div>
                     <h1>CONGRATS</h1>
@@ -122,7 +121,7 @@ const GameScreen = ({ gameEnded}) => {
                                 <button key={colIndex}
                                         className={selectedLetters.has(letter.toLowerCase()) ? styles.selectedKey : styles.defaultKey}
                                         onClick={() => handleLetterSelection(letter)}
-                                        style={{ width: '50px', height: '50px', margin: '5px', fontFamily: 'cursive', fontSize: '130%' }}
+                                        style={{ width: '50px', height: '50px', margin: '5px', fontFamily: 'cursive', fontSize: '170%' }}
                                         disabled={selectedLetters.has(letter.toLowerCase())}
                                 >
                                     {letter}
@@ -132,7 +131,7 @@ const GameScreen = ({ gameEnded}) => {
                     ))}
                 </div>
             }
-            <button onClick={fetchQuote}>Restart</button>
+            <button className='px-4 py-4 bg-buttonColor rounded-[20px] hover:bg-red-950' onClick={fetchQuote}>Restart</button>
         </div>
     )
 }

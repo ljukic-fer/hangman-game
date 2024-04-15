@@ -55,7 +55,7 @@ const HomePage = ({ gameStarted }) => {
                 HANGMAN GAME
             </h1>
 
-            <div className='flex flex-col items-center'>
+            <div className='flex flex-col items-center my-8'>
                 <div className='flex justify-center items-center h-24 w-24 bg-yellow-300 rounded-full'>
                     <div id="left-eye" className="text-black text-4xl font-bold transform -translate-x-2 -translate-y-1/2">
                         <div className="spinner animate-spin"></div>
@@ -68,12 +68,8 @@ const HomePage = ({ gameStarted }) => {
                 <div className='mouth-container justify-center transform -translate-y-10'>
                     <div className='mouth'></div>
                 </div>
-                <div className='flex justify-center items-center text-black text-6xl'>
-                    {chars + '_'.repeat(6 - chars.length)}
-                </div>
-                <div className='flex justify-center items-center text-black text-6xl'>
-
-                    <div>_ _ _ _ _ _ _ </div>
+                <div className='flex justify-center items-center text-black text-6xl my-10'>
+                    {chars + '_ '.repeat(6 - chars.length)}
                 </div>
             </div>
 
