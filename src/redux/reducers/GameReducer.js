@@ -5,7 +5,8 @@ const initialState = {
     selectedLetters: new Set(),
     errors: 0,
     gameOver: false,
-    timer: 0
+    timer: 0,
+    gameStarted: false
 }
 
 const GameReducer = (state = initialState, action) => {
@@ -39,6 +40,11 @@ const GameReducer = (state = initialState, action) => {
             return {
                 ...state,
                 timer: action.payload
+            };
+        case 'SET_GAME_STARTED':
+            return {
+                ...state,
+                gameStarted: action.payload
             };
         default:
             return state;

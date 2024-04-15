@@ -57,11 +57,11 @@ const HomePage = ({ gameStarted }) => {
 
             <div className='flex flex-col items-center'>
                 <div className='flex justify-center items-center h-24 w-24 bg-yellow-300 rounded-full'>
-                    <div id="left-eye" class="text-black text-4xl font-bold transform -translate-x-2 -translate-y-1/2">
-                        <div class="spinner animate-spin"></div>
+                    <div id="left-eye" className="text-black text-4xl font-bold transform -translate-x-2 -translate-y-1/2">
+                        <div className="spinner animate-spin"></div>
                     </div>
-                    <div id="right-eye" class="text-black text-4xl font-bold transform translate-x-2 -translate-y-1/2">
-                        <div class="spinner animate-spin"></div>
+                    <div id="right-eye" className="text-black text-4xl font-bold transform translate-x-2 -translate-y-1/2">
+                        <div className="spinner animate-spin"></div>
                     </div>
 
                 </div>

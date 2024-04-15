@@ -28,3 +28,7 @@ export const setTimer = (timer) => ({
     payload: timer
 })
 
+export const setGameStarted = (gameStarted) => ({
+    type: 'SET_GAME_STARTED',
+    payload: gameStarted
+})

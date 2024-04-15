@@ -1,29 +1,33 @@
 import './App.css';
 import GameScreen from './components/GameScreen';
 import HomePage from './components/HomePage';
-import { useState } from 'react';
 import store from './redux/store';
 import { Provider } from 'react-redux';
 import HighScores from './components/HighScores';
+import { useDispatch, useSelector } from 'react-redux';
+import { setName } from './redux/actions/HomePageActions';
+import { setErrors, setGameStarted, setGameOver } from './redux/actions/GameActions';
 
 function App() {
-  const [name, setName] = useState('');
-  const [started, setStarted] = useState(false);
-  const [finished, setFinished] = useState(false);
-  const [errors, setErrors] = useState(0);
+  const dispatch = useDispatch();
+
+  const name = useSelector((state) => state.homePage.name);
+  const errors = useSelector((state) => state.game.errors);
+  const gameStarted = useSelector((state) => state.game.gameStarted);
+  const gameOver = useSelector((state) => state.game.gameOver);
 
   const startGame = (passedName) => {
-    setName(passedName);
-    setStarted(true);
+    dispatch(setName(passedName));
+    dispatch(setGameStarted(true));
   }
 
   const endGame = (errors) => {
-    setFinished(true);
-    setErrors(errors);
+    dispatch(setGameOver(true));
+    dispatch(setErrors(errors));
   }
 
   const newGame = () => {
-    setFinished(false);
+    dispatch(setGameOver(false));
   }
 
 
@@ -31,9 +35,9 @@ function App() {
     <Provider store={store}>
     <div className="App">
       <header className="App-header bg-gradient-to-br from-teal-400 to-violet-400">
-        {!started && !finished && <HomePage gameStarted={startGame} />}
-        {started && !finished && <GameScreen username={name} gameEnded={endGame}/>}
-        {started && finished && <HighScores user={name} errs={errors} gameRestarted={newGame}/>}
+        {!gameStarted && !gameOver && <HomePage gameStarted={startGame} />}
+        {gameStarted && !gameOver && <GameScreen username={name} gameEnded={endGame}/>}
+        {gameStarted && gameOver && <HighScores user={name} errs={errors} gameRestarted={newGame}/>}
       </header>
     </div>
     </Provider>

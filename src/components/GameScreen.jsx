@@ -88,6 +88,7 @@ const GameScreen = ({ gameEnded}) => {
         }
 
         try {
+            console.log(score)
             await axios.post('https://my-json-server.typicode.com/stanko-ingemark/hang_the_wise_man_frontend_task/highscores',
                 score, {
                 headers: {
