@@ -3,17 +3,19 @@ import styles from '../style';
 
 const HomePage = ({ gameStarted }) => {
     const [name, setName] = useState('');
-    const [xChars, setXChars] = useState('');
+    const [xChars, setXChars] = useState('______');
     const [resetChars, setResetChars] = useState(0);
+    const [usedIndexes, setUsedIndexes] = useState([]);
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
     useEffect(() => {
         const intervalId = setInterval(() => {
             if (xChars.length<6) {
-                setXChars(prevChars => prevChars + letters[Math.floor(Math.random()*letters.length)])
+                const randomLetter = letters[Math.floor(Math.random()*letters.length)];
+                setXChars(prevChars => prevChars + randomLetter);
             } else {
                 setXChars('');
-                setResetChars(prevCounter => prevCounter + 1)
+                setResetChars(prevCounter => prevCounter + 1);
             }
         }, 500);
         return () => clearInterval(intervalId);

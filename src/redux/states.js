@@ -1,17 +1,8 @@
-const initialState = {
-    quote: '',
-    hiddenQuote: '',
-    selectedLetters: new Set(),
-    errors: 0,
-    gameOver: false,
-    highScores: []
-}
+import { combineReducers } from "redux";
+import HighScoresReducer from "./reducers/HighScoresReducer";
 
-const rootReducer = (state = initialState, action) => {
-    switch (action.type) {
-        default:
-            return state;
-    }
-};
+const rootReducer = combineReducers({
+    highScores: HighScoresReducer
+})
 
-export default rootReducer
+export default rootReducer;

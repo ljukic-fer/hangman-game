@@ -1,20 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchScores } from '../redux/actions/HighScoresActions';
 
-const HighScores = ( {user, errs, gameRestarted} ) => {
-    const [scores, setScores] = useState([]);    
+const HighScores = ({ user, errs, gameRestarted }) => {
 
-    useEffect (() => {
-        fetchScores();
-    },[])
-    const fetchScores = async () => {
-        try {
-            const response = await axios.get('https://my-json-server.typicode.com/stanko-ingemark/hang_the_wise_man_frontend_task/highscores');
-            setScores(response.data);
-        } catch (error) {
-            console.error("Error fetchig highscores: ", error);
-        }
-    }
+    const dispatch = useDispatch();
+    const { scores, loading, error } = useSelector((state) => state.highScores)
+
+    useEffect(() => {
+        dispatch(fetchScores());
+    }, [dispatch])
+
 
     const newGame = () => {
         gameRestarted(user);
@@ -28,9 +24,13 @@ const HighScores = ( {user, errs, gameRestarted} ) => {
             <h1>
                 HighScores
             </h1>
-            {scores.map(({ id, userName, errors }) => {
-                return <p key={id}>{userName} : {100 / (1 + errors)}</p>
-            })}
+            <ul>
+                {scores.map((score) => (
+                    <li key={score.id}>
+                        {score.userName}: {100 / (1 + score.errors)}
+                    </li>
+                ))}
+            </ul>
         </div>
     )
 }
