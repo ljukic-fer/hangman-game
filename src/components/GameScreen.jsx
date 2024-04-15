@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import axios from 'axios';
 import styles from '../style';
+import { useDispatch, useSelector } from 'react-redux';
+import { setQuote, setHiddenQuote, setSelectedLetters, setGameOver, setErrors, setTimer } from '../redux/actions/GameActions';
 
-const GameScreen = ({ username, gameEnded}) => {
-    const [quote, setQuote] = useState('');
-    const [hiddenQuote, setHiddenQuote] = useState('');
-    const [selectedLetters, setSelectedLetters] = useState(new Set());
-    const [errors, setErrors] = useState(0);
-    const [gameOver, setGameOver] = useState(false);
-    const [timer, setTimer] = useState(0);
+const GameScreen = ({ gameEnded}) => {
+    const dispatch = useDispatch();
 
+    const name = useSelector((state) => state.homePage.name);
+    const quote = useSelector((state) => state.game.quote);
+    const hiddenQuote = useSelector((state) => state.game.hiddenQuote);
+    const selectedLetters = useSelector((state) => state.game.selectedLetters);
+    const gameOver = useSelector((state) => state.game.gameOver);
+    const errors = useSelector((state) => state.game.errors);
+    const timer = useSelector((state) => state.game.timer);
 
     const keyboardLayout = [
         'QWERTZUIOP',
@@ -25,12 +29,12 @@ const GameScreen = ({ username, gameEnded}) => {
     const fetchQuote = async () => {
         try {
             const response = await axios.get('https://api.quotable.io/random');
-            setQuote(response.data.content);
-            setHiddenQuote(hideQuote(response.data.content));
-            setGameOver(false);
-            setSelectedLetters(new Set());
-            setErrors(0);
-            setTimer(Date.now());
+            dispatch(setQuote(response.data.content));
+            dispatch(setHiddenQuote(hideQuote(response.data.content)));
+            dispatch(setGameOver(false));
+            dispatch(setSelectedLetters(new Set()));
+            dispatch(setErrors(0));
+            dispatch(setTimer(Date.now()));
         } catch (error) {
             console.error('Error getting quote: ', error);
         }
@@ -42,8 +46,8 @@ const GameScreen = ({ username, gameEnded}) => {
 
     const handleLetterSelection = (letter) => {
         if (!selectedLetters.has(letter.toLowerCase())) {
-            setSelectedLetters(new Set(selectedLetters).add(letter.toLowerCase()))
-            revealLetter(letter.toLowerCase())
+            dispatch(setSelectedLetters(new Set(selectedLetters).add(letter.toLowerCase())));
+            revealLetter(letter.toLowerCase());
         }
     }
 
@@ -62,11 +66,11 @@ const GameScreen = ({ username, gameEnded}) => {
             })
             .join('');
 
-        setHiddenQuote(adjustedHiddenQuote);
-        if (!quote.toLowerCase().includes(letter)) setErrors(errors + 1);
+        dispatch(setHiddenQuote(adjustedHiddenQuote));
+        if (!quote.toLowerCase().includes(letter)) dispatch(setErrors(errors + 1));
         if (quote === adjustedHiddenQuote) {
-            setGameOver(true);
-            setTimer(Date.now() - timer);
+            dispatch(setGameOver(true));
+            dispatch(setTimer(Date.now() - timer));
             sendScore();
             gameEnded(errors);
         }
@@ -78,7 +82,7 @@ const GameScreen = ({ username, gameEnded}) => {
             quoteId: quote.id,
             length: quote.length,
             uniqueCharacters: new Set(quote.toLowerCase().match(/[a-z]/g).size),
-            userName: username,
+            userName: name,
             errors: errors,
             duration: timer
         }
@@ -97,7 +101,7 @@ const GameScreen = ({ username, gameEnded}) => {
 
     return (
         <div>
-            <h1 className={styles.heading2}>Welcome {username}</h1>
+            <h1 className={styles.heading2}>Welcome {name}</h1>
             <h1>Random fetched quote:</h1>
             {!gameOver &&
                 <h2 className={styles.heading2}>Errors: {errors}</h2>

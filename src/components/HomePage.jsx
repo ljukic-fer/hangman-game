@@ -1,40 +1,50 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import styles from '../style';
+import { useDispatch, useSelector } from 'react-redux';
+import { setName, setChars, setCharCounter } from '../redux/actions/HomePageActions'
 
 const HomePage = ({ gameStarted }) => {
-    const [name, setName] = useState('');
-    const [xChars, setXChars] = useState('______');
-    const [resetChars, setResetChars] = useState(0);
-    const [usedIndexes, setUsedIndexes] = useState([]);
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+    const dispatch = useDispatch();
+    const charCounter = useSelector((state) => state.homePage.charCounter)
+    const chars = useSelector((state) => state.homePage.chars)
+    const name = useSelector((state) => state.homePage.name)
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            if (xChars.length<6) {
-                const randomLetter = letters[Math.floor(Math.random()*letters.length)];
-                setXChars(prevChars => prevChars + randomLetter);
+            if (chars.length < 6) {
+                const randomLetter = letters[Math.floor(Math.random() * letters.length)];
+                dispatch(setChars(chars + randomLetter));
             } else {
-                setXChars('');
-                setResetChars(prevCounter => prevCounter + 1);
+                dispatch(setChars(''));
+                dispatch(setCharCounter(charCounter + 1));
             }
         }, 500);
         return () => clearInterval(intervalId);
-    }, [xChars]);
+    }, [chars, charCounter, dispatch]);
 
     useEffect(() => {
-        if (resetChars>0) {
+        if (charCounter > 0) {
             setTimeout(() => {
-                setResetChars(prevCounter => prevCounter - 1)
+                dispatch(setCharCounter(charCounter - 1));
             }, 500)
         }
-    }, [resetChars])
+    }, [charCounter, dispatch])
 
     const provideName = () => {
         if (name !== '') {
+            dispatch(setName(name))
+            console.log(name)
             gameStarted(name)
         }
     }
-    
+
+    const handleNameChange = (e) => {
+        const newName = e.target.value.trim();
+        dispatch(setName(newName));
+    };
+
 
     return (
         <div className='container mx-auto p-2'>
@@ -48,10 +58,10 @@ const HomePage = ({ gameStarted }) => {
             <div className='flex flex-col items-center'>
                 <div className='flex justify-center items-center h-24 w-24 bg-yellow-300 rounded-full'>
                     <div id="left-eye" class="text-black text-4xl font-bold transform -translate-x-2 -translate-y-1/2">
-                    <div class="spinner animate-spin"></div>
+                        <div class="spinner animate-spin"></div>
                     </div>
                     <div id="right-eye" class="text-black text-4xl font-bold transform translate-x-2 -translate-y-1/2">
-                    <div class="spinner animate-spin"></div>
+                        <div class="spinner animate-spin"></div>
                     </div>
 
                 </div>
@@ -59,10 +69,10 @@ const HomePage = ({ gameStarted }) => {
                     <div className='mouth'></div>
                 </div>
                 <div className='flex justify-center items-center text-black text-6xl'>
-                    {xChars + '_'.repeat(6-xChars.length)}
+                    {chars + '_'.repeat(6 - chars.length)}
                 </div>
                 <div className='flex justify-center items-center text-black text-6xl'>
-                    
+
                     <div>_ _ _ _ _ _ _ </div>
                 </div>
             </div>
@@ -70,7 +80,7 @@ const HomePage = ({ gameStarted }) => {
 
             <p className={styles.paragraph}>Enter your name here:</p>
             <div>
-                <input className='text-md font-normal text-black rounded-lg' type='text' id='name' value={name} onChange={(e) => setName(e.target.value)} />
+                <input className='text-md font-normal text-black rounded-lg' type='text' id='name' value={name} onChange={handleNameChange} />
             </div>
             <button className='px-4 py-4 bg-buttonColor rounded-[20px]' onClick={provideName}>Let's hang!</button>
             {name !== '' && <h2 className={styles.paragraph}>Welcome {name}</h2>}
